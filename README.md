@@ -33,9 +33,16 @@
 * unzip master.zip
 * sudo mv wallpaper-master/fedora.png /usr/share/backgrounds/images
 * rm master.zip
+#### Dracula gedit
+* wget https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+* mkdir -p ~/.local/share/gedit/styles
+* mv dracula.xml ~/.local/share/gedit/styles/
+* rm dracula.xml
+
 
 
 TODOs:
 * add xfce4 terminal config and preference file
 * clean up of themes? or standardize of updates with git pulls?
 * Currently need to manually enable the installed themes, icons, and backgrounds, would like to change that automatically
+* Add launcher apps automatically to the panel 
