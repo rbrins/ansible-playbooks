@@ -1,14 +1,22 @@
 # Setup file for personal development workstation
 
+### General Updates, Permissions, and Configurations
 * Currently using fedora 36 as the base OS
 * dnf -y update
-* dnf groupinstall "XFce Desktop"
-* dnf -y install gedit
 * ssh-keygen 
 * installing guest addons
+* sudo usermod --append --groups vboxsf $USER
+* restart???
+* cp .ssh/id_rsa.pub /media/sf_shared
+
+### Adding Applications
+* dnf -y install gedit
 * dnf -y install ansible
+* dnf -y install docker
 
 ### Themes & Apperance
+XFce Desktop is really only needed for VMs, the default gnome should work just fine with gtk themes right? 
+* dnf groupinstall "XFce Desktop"
 #### Dracula theme for xfce4 terminal 
 * cd /opt && sudo git clone https://github.com/dracula/xfce4-terminal.git
 * cd ~
@@ -46,3 +54,4 @@ TODOs:
 * clean up of themes? or standardize of updates with git pulls?
 * Currently need to manually enable the installed themes, icons, and backgrounds, would like to change that automatically
 * Add launcher apps automatically to the panel 
+* Considering text editor from dc864 meeting for normal editing
