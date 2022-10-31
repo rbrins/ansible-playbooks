@@ -10,9 +10,8 @@
 * cp .ssh/id_rsa.pub /media/sf_shared
 
 ### Adding Applications
-* dnf -y install gedit
-* dnf -y install ansible
-* dnf -y install docker
+* dnf -y install gedit ansible docker
+* dnf -y groupinstall "Development Tools"
 
 ### Themes & Apperance
 XFce Desktop is really only needed for VMs, the default gnome should work just fine with gtk themes right? 
@@ -46,6 +45,12 @@ XFce Desktop is really only needed for VMs, the default gnome should work just f
 * mkdir -p ~/.local/share/gedit/styles
 * mv dracula.xml ~/.local/share/gedit/styles/
 * rm dracula.xml
+
+### Install Homebrew
+* /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+* echo '# Set PATH, MANPATH, etc., for Homebrew.' >> /home/russell/.bash_profile
+* echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/russell/.bash_profile
+* eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 
 
