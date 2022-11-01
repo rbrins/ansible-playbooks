@@ -10,7 +10,7 @@
 * cp .ssh/id_rsa.pub /media/sf_shared
 
 ### Adding Applications
-* dnf -y install gedit ansible docker
+* dnf -y install gedit ansible docker stack haskell-platform
 * dnf -y groupinstall "Development Tools"
 
 ### Themes & Apperance
@@ -51,8 +51,6 @@ XFce Desktop is really only needed for VMs, the default gnome should work just f
 * echo '# Set PATH, MANPATH, etc., for Homebrew.' >> /home/russell/.bash_profile
 * echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/russell/.bash_profile
 * eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-
 
 TODOs:
 * add xfce4 terminal config and preference file
