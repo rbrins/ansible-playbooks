@@ -1,0 +1,12 @@
+#+TITLE: Setting up a DNS Server with Bind9 for your Attack Lab
+#+AUTHOR: Russell Brinson
+#+DATE: [2023-02-04 Sat]
+
+* Overview
+
+While testing out Sliver C2, I ran into an issue of not being able to use raw IPv4 addresses, which makes sense 
+
+
+* Resources
+
+- [[https://soultec.ch/homelab-setting-up-a-small-dns-server-for-your-homelab/][soulTec Setting up small DNS server for your Homelab]]

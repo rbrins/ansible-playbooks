@@ -1,0 +1,98 @@
+#+TITLE: Pivoting Lab Setup
+#+DATE: 2023-01-23
+#+AUTHOR: Russell Brinson
+#+OPTIONS: tasks:nil validate:nil toc:nil
+
+* Home Lab Setup
+This setup is meant to compliment a pivoting techniques session at DC864, but seemed to be comprehensive enough to be worth publishing by itself. 
+
+#+attr_html: :width 800px
+[[file:../img/pivoting-diagram.png]]
+
+** Install & Pre-Req Setup
+1. Install [[https://www.virtualbox.org/wiki/Downloads][VirtualBox]]
+2. Install [[https://developer.hashicorp.com/vagrant/downloads][Vagrant]]
+   - note: [[https://developer.hashicorp.com/vagrant/docs/providers/virtualbox][Vagrant comes standard with VirtualBox support]]
+3. Possibly need to [[https://lucanuscervus-notes.readthedocs.io/en/latest/Virtualization/Vagrant/Vagrant%20Path/][add =C:\Hashicorp\Vagrant\bin= to windows env path]]
+   - And be sure to have other path variables set
+
+4. Create a directory named =shared= in your home folder
+5. Copy your =id_rsa.pub= from attacker box to the =shared= directory
+6. Review diagram above for box naming
+7. This setup assumes you have kali setup in a virtual environment, ensure that it is connected to the private network on Virtual Box Host Only Adapter with static ip of 192.168.100.5. 
+
+** Creating Alpha Box
+1. Create directory for the alpha box
+   - my example was =mkdir ~/alpha=
+2. =vagrant box add [link to vagrant cloud]= - [[https://app.vagrantup.com/boxes/search][Vagrant cloud]]
+   - We are using [[https://app.vagrantup.com/ubuntu/boxes/focal64][ubuntu/focal64]] so the above command would be =vagrant box add ubuntu/focal64=
+3. =vagrant init ubuntu/focal64= within the alpha box directory you created in step 6
+4. configure =Vagrantfile= to the below source code
+   - I'm using emacs but feel free to use notepad, vscode, or whatever text editor
+   - yours will probably have a lot more comments then mine, feel free to just use the code below and delete all the comments
+5. =vagrant up= 
+   - we should be able to see it running now
+   - also, we need to know provision it to be a box worthy of lab running
+
+#+BEGIN_SRC ruby
+Vagrant.configure("2") do |config|
+
+ config.vm.box = "ubuntu/focal64"
+ # change the ~/shared/ if you changed the location or name of your shared dir in step 4
+ config.vm.synced_folder "~/shared/", "/home/vagrant/shared"
+
+ # this creates our two NICs in the diagram linked in step 6
+ config.vm.network "private_network", ip: "192.168.100.12"
+ config.vm.network "private_network", ip: "172.16.100.12", virtualbox__intnet: true
+ 
+ # change id_rsa.pub if you changed the name of it when copying in step 5
+ config.vm.provision "shell", inline: <<-SHELL
+     cat /home/vagrant/shared/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+   SHELL
+
+end
+#+END_SRC 
+
+** Create Beta Box
+1. Now we are creating a new directory (not within the alpha directory) called =beta=, I put mine in the =~/= home directory
+2. =vagrant init ubuntu/focal64= this will redownload, there is a way to link boxes/images but this is the most straightforward for now
+3. Configured the =Vagrantfile= to the below source
+4. =vagrant up=
+#+BEGIN_SRC ruby
+Vagrant.configure("2") do |config|
+
+ config.vm.box = "ubuntu/focal64"
+ # change the ~/shared/ if you changed the location or name of your shared dir in step 4
+ config.vm.synced_folder "~/shared/", "/home/vagrant/shared"
+
+ # this creates our one NICs in the diagram linked in step 6
+ config.vm.network "private_network", ip: "172.16.100.13", virtualbox__intnet: true
+ 
+ # change id_rsa.pub if you changed the name of it when copying in step 5
+ config.vm.provision "shell", inline: <<-SHELL
+     cat /home/vagrant/shared/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+   SHELL
+
+end
+#+END_SRC 
+
+** Test Lab Setup
+1. And now, we can begin testing with our kali box if everything is setup
+2. from the kali box, =ping -c 3 192.168.100.12= and should be able to reach the box with ICMP received response
+3. from the kali box, =ping -c 3 172.16.100.12= and should have output "Destination Host Unreachable"
+4. from within the **alpha** box directory, =vagrant ssh=
+5. =ping -c 3 172.16.100.13= and should be able to reach the box with ICMP received response
+6. type =exit= in the vagrant ssh session
+7. from within the **beta** box directory, =vagrant ssh=
+8. =ping -c 3 172.16.100.12= and should be able to reach the box with ICMP received response
+9. =ping -c 3 192.168.100.12= and should have output "Destination Host Unreachable"
+
+
+* Final Notes
+
+- [[https://developer.hashicorp.com/vagrant/docs/providers/virtualbox][Vagrant's documentation on VirtualBox]]
+- Do not manage these created by vagrant from your virtualbox interface
+- to shutdown the boxes, run =vagrant halt= within the directory the VM is located
+- if you need to reset the box this is the beauty of vagrant, just =vagrant destroy= in the correct directory and it will destroy the VM but keep your vagrant file intact.
+- if you use =vagrant destroy= or otherwise rebuild the system, you may get an ssh warning, about a man-in-the-middle attack, from your kali box just follow the instruction which will look a little like =ssh-keygen -f "/home/kali/.ssh/known_hosts" -R "192.168.100.12"= 
+- And /please/ ask questions, follow along with the pivoting technique overview, and have fun!
