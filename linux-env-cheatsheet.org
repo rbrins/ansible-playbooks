@@ -1,0 +1,12 @@
+#+TITLE: Linux Environment Cheatsheet
+#+AUTHOR: Russell Brinson
+
+* Overview
+This is meant to eventually be similar to the cheatsheet to the right of DTOS's screen with navigational shortcuts. For now, an org file will need to do.
+
+* Navigation
+In GNOME to move desktops 
+|  Keys               | Description                       |
+|---------------------+-----------------------------------|
+| =C-M-<right arrow>= | Moves to the desktop to the right |
+| =C-M-<left arrow>=  | Moves to the desktop to the left  |
