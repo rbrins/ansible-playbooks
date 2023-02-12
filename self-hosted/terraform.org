@@ -21,7 +21,7 @@ provider "aws" {
 
 #+BEGIN_SRC tf
 resource "aws_instance" "example" {
-  ami = "ami-2757f631"
+  ami = ""
   instance_type = "t2.micro"
 }
 #+END_SRC
