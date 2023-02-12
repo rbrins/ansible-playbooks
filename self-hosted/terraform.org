@@ -1,0 +1,47 @@
+#+TITLE: Terraform for hosting
+#+AUTHOR: Russell Brinson
+#+DATE: [2023-02-05 Sun]
+
+* AWS Authentication
+
+#+BEGIN_SRC tf
+provider "aws" {
+  region = "us-east-2"
+  access_key = "my-access-key"
+  secret_key = "my-secret-key"
+}
+#+END_SRC
+
+* New User in IAM
+1. Setup Programmatic Access
+2. Select and Attach Existing Policies - article mentions AdministratorAccess
+3. Complete and Download
+
+* Quick Creation
+
+#+BEGIN_SRC tf
+resource "aws_instance" "example" {
+  ami = "ami-2757f631"
+  instance_type = "t2.micro"
+}
+#+END_SRC
+
+* Basic Security Group
+
+#+BEGIN_SRC tf
+resource "aws_security_group" "nextcloud-sg" {
+  ingress {
+
+  }
+}
+#+END_SRC
+
+
+
+* Run the commands
+
+1. Create the directory and save as =main.tf=
+2. ~terraform init~ 
+3. ~terraform plan~ to check what changes are going to happen
+4. ~terraform apply~
+

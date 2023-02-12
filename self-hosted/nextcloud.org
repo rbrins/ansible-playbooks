@@ -1,0 +1,40 @@
+#+title: Nextcloud Setup & Maintenance
+#+AUTHOR: Russell Brinson
+#+DATE: [2023-02-05 Sun]
+
+* Overview
+[[https://nextcloud.com/][Nextcloud]] is a self-hosted alternative to services like M365 and Google Suite of Apps. It is also great for syncing local files without the bloat of Onedrive or Google Drive. Can have full encryption even if on another hosted platform, and files stored, uploaded, and created within Nextcloud are all non-proprietary.
+
+* Setup & Install
+There are a number of different options for installing and setting up Nextcloud. From their [[https://nextcloud.com/install/#instructions-server][install page]], we have a couple of simple options like an all-in-one docker image, VM image, or web installer. For now, I'll go with the docker install which points me to the [[https://github.com/nextcloud/all-in-one#nextcloud-all-in-one][Nextcloud all-in-one github page]]. We will be installing this on a cloud server of some sort and the instructions provided assume a linux server.
+
+** Cloud Linux Server Setup
+Time to learn a little about Terraform since I want to be able to rapidly provision and run this.
+
+
+
+* Security Considerations
+A production family server wouldn't be complete without some security planning and considerations.
+1. We will store files that contain PII
+2. We will use the calendar integration to manage family events
+3. We will use the email / chat to manage communications
+
+Known and suspected threats:
+- scammers that try to fraud out of money
+- web crawlers that bruteforce anything they can find
+- forgetting to renew DNS
+- forgetting to pay the cloud bill
+- 0-day dropped that targets underlying infrastructure or service and exploited by crawlers at large
+
+Application Protections:
+- Email
+  - Spam Protections
+- Logins for email and nextcloud
+  - Bruteforcing blocking and lock out
+  - Login form does not disclose useful information
+- Files are encrypted on disk in the server
+  - who manages private key?
+- Communication to user devices from server must use TLS, no downgrading allowed
+- Regular backups, integrity checking, and rotation
+  - [[https://github.com/nextcloud/all-in-one#nextcloud-all-in-one][Backups available in the docker image]] and act as local restore point without automatic encryption (need to save key)
+  - Backup app needed to provide remote backups, this would be a nice piece of mind depending on what happen to local files if nextcloud goes down.
