@@ -1,0 +1,116 @@
+#+TITLE: Setup file for personal development workstation
+#+AUTHOR: Russell Brinson
+#+DATE: [2023-02-09]
+
+* Overview
+This is meant to aim me in setup of my ubuntu system. It will use org-babel-tangle to be a literate program.
+
+* Prerequistites
+
+** Installing Doom
+Then I want to make sure I get emacs and doom installed so I can compile the rest of this script. I'm going to go with emacs from the maintained repo so that I get something quick.
+
+#+BEGIN_SRC shell
+sudo apt update
+sudo apt upgrade
+sudo apt install git ripgrep fd-find
+
+sudo snap install emacs --classic
+
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
+~/.emacs.d/bin/doom install
+
+#+END_SRC
+
+** Setting up Doom
+
+- Add to path with adding ~export PATH="$HOME/.emacs.d/bin:$PATH"~ to the =.bash_profile=
+- add packages in =~/.doom.d/init.el=
+- run =doom sync=
+
+** Git Cloning Projects
+
+- ~ssh-keygen -t ed25519 -C "emailAddressHere" -f ~/.ssh/github-rbrins~
+- ~cat ~/.ssh/github-rbrins.pub~, copy and paste into github
+- Setup =~/.ssh/.config= 
+#+BEGIN_SRC
+Host github.com
+    User git
+    Hostname github.com
+    PreferredAutentications publickey
+    IdentityFile /home/rbrins/.ssh/github-rbrins
+#+END_SRC
+- Using doom magit, clone the repositories into a =~/projects= directory
+
+
+** Restoring Backups from AWS and Github
+
+- Install bitwarden firefox extention
+- Go to AWS and get personal-backup user access key and secret key, then export them
+- Then we will download restic into opt, change the permissions
+- And run restic to restore and backup files
+#+BEGIN_SRC shell :results none
+wget https://github.com/restic/restic/releases/download/v0.15.1/restic_0.15.1_linux_amd64.bz2
+
+#+END_SRC
+
+
+* General Updates, Permissions, and Configurations
+
+
+** VirtualBox
+- sudo usermod --append --groups vboxsf $USER
+- restart???
+
+* Adding Applications
+
+#+BEGIN_SRC
+apt install ansible docker gcc python3
+snap install 
+#+END_SRC
+
+* Themes & Apperance
+XFce Desktop is really only needed for VMs, the default gnome should work just fine with gtk themes right? 
+- dnf groupinstall "XFce Desktop"
+* Dracula theme for xfce4 terminal 
+- cd /opt && sudo git clone https://github.com/dracula/xfce4-terminal.git
+- cd ~
+- mkdir -p ~/.local/share/xfce4/terminal/colorschemes
+- cp /opt/xfce4-terminal/Dracula.theme ~/.local/share/xfce4/terminal/colorschemes
+** Dracula theme for xfce4 (through gtk)
+- wget https://github.com/dracula/gtk/archive/master.zip 
+- mkdir -p ~/.themes
+- unzip master.zip -d ~/.themes
+- mv ~/.themes/gtk-master ~/.themes/Dracula
+- gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
+- gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
+- rm master.zip
+** Dracula icons
+- wget https://github.com/dracula/gtk/files/5214870/Dracula.zip
+- mkdir -p ~/.icons
+- unzip Dracular.zip -d ~/.icons
+- gsettings set org.gnome.desktop.interface icon-theme "Dracula"
+- rm Dracula.zip
+** Dracula wallpaper
+- wget https://github.com/dracula/wallpaper/archive/master.zip
+- unzip master.zip
+- sudo mv wallpaper-master/fedora.png /usr/share/backgrounds/images
+- rm master.zip
+** Dracula gedit
+- wget https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+- mkdir -p ~/.local/share/gedit/styles
+- mv dracula.xml ~/.local/share/gedit/styles/
+- rm dracula.xml
+
+* Install Homebrew
+- /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+- echo '# Set PATH, MANPATH, etc., for Homebrew.' >> /home/russell/.bash_profile
+- echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/russell/.bash_profile
+- eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+* TODs
+- add xfce4 terminal config and preference file
+- clean up of themes? or standardize of updates with git pulls?
+- Currently need to manually enable the installed themes, icons, and backgrounds, would like to change that automatically
+- Add launcher apps automatically to the panel 
+- Considering text editor from dc864 meeting for normal editing
