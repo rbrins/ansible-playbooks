@@ -1,0 +1,21 @@
+---
+- hosts: pivot_beta
+  become: yes
+  tasks:
+    - name: Get sudo version number, needs to be less than 1.9.12p1
+      shell: sudo --version | grep "Sudo version" | cut -d" " -f3
+      register: sudo_version
+      args:
+        warn: false
+
+    - debug: var=sudo_version.stdout_lines
+
+    - name: Add low priv test user.
+      user:
+        name: johnd
+	comment: test user for sudoedit vuln
+	shell: /bin/bash
+	generate_ssh_key: yes
+	ssh_key_bits: 2048
+	ssh_key_file: .ssh/id_rsa
+	
