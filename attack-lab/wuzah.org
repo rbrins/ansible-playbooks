@@ -33,12 +33,12 @@ provider "aws" {
   region = "us-east-2"
 }
 
-resource "aws_instance" "wuzah-test" {
+resource "aws_instance" "wazuh-test" {
   ami           = "ami-0e83be366243f524a"
   instance_type = "t3a.medium"
 
   tags = {
-    Name = "wuzah-test"
+    Name = "wazuh-test"
   }
 }
 #+END_SRC
@@ -46,3 +46,14 @@ resource "aws_instance" "wuzah-test" {
 - ~terraform init~
 - ~terraform plan~
 - ~terraform apply~
+
+** AWS Web Console
+
+- added inbound rule with SSH on my ip
+
+* Wazuh Indexer Installation
+
+#+BEGIN_SRC shell
+curl -sO https://packages.wazuh.com/4.6/wazuh-install.sh
+curl -sO https://packages.wazuh.com/4.6/config.yml
+#+END_SRC
